@@ -40,7 +40,7 @@ public class DuplicateCheckController {
 	DictQueryBlackListHandler dictQueryBlackListHandler;
 
 	/**
-	 * 校验数据是否在系统中是否存在
+	 * 校验数据是否在系统中是否存在[
 	 * 
 	 * @return
 	 */

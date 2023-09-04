@@ -12,6 +12,7 @@
     <artifactId>jeecg-module-demo</artifactId>
 
     <dependencies>
+        <!-- jeecg-boot-base-core包含了mybatis-plus、等等很多依赖-->
         <dependency>
             <groupId>org.jeecgframework.boot</groupId>
             <artifactId>jeecg-boot-base-core</artifactId>
