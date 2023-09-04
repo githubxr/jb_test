@@ -5,6 +5,8 @@ import org.jeecg.common.api.CommonAPI;
 import org.jeecg.common.api.dto.DataLogDTO;
 import org.jeecg.common.api.dto.OnlineAuthDTO;
 import org.jeecg.common.api.dto.message.*;
+import org.jeecg.common.api.dto.system.SysUserRoleDTO;
+import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.ServiceNameConstants;
 import org.jeecg.common.system.api.factory.SysBaseAPIFallbackFactory;
 import org.jeecg.common.system.vo.*;
@@ -31,6 +33,8 @@ import java.util.Set;
 @ConditionalOnMissingClass("org.jeecg.modules.system.service.impl.SysBaseApiImpl")
 public interface ISysBaseAPI extends CommonAPI {
 
+    @PostMapping("/sys/api/addSysUserBatch")
+    public Result<Boolean> addSysUserBatch(@RequestBody List<SysUserRoleDTO> dtoList);
     /**
      * 1发送系统消息
      * @param message 使用构造器赋值参数 如果不设置category(消息类型)则默认为2 发送系统消息

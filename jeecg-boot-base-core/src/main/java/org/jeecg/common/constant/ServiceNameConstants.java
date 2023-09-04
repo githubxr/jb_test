@@ -34,6 +34,12 @@ public interface ServiceNameConstants {
 	 */
 	String SERVICE_DEMO = "jeecg-demo";
 	/**
+	 * 微服务名：test模块
+	 * @Author：XiaoQ
+	 * @Date: 23-8-16
+	 */
+	String SERVICE_TEST = "jeecg-test";
+	/**
 	 * 微服务名：online在线模块
 	 */
 	String SERVICE_ONLINE = "jeecg-online";

@@ -9,3 +9,11 @@ rebel.xml
 
 ## front
 **/*.lock
+/hs_err_pid328.log
+/hs_err_pid10148.log
+/hs_err_pid12860.log
+/hs_err_pid13068.log
+/replay_pid328.log
+/replay_pid10148.log
+/replay_pid12860.log
+/replay_pid13068.log

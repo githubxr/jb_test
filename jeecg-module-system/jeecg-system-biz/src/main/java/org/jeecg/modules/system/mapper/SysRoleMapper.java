@@ -2,6 +2,7 @@ package org.jeecg.modules.system.mapper;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.jeecg.modules.system.entity.SysRole;
 
@@ -16,6 +17,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2018-12-19
  */
 public interface SysRoleMapper extends BaseMapper<SysRole> {
+
+    /**
+     * 通过名字获取
+     * */
+    @Select("select * from sys_role where role_name= #{roleName}")
+    SysRole getOneByName(String roleName);
 
     /**
      * 删除角色与用户关系

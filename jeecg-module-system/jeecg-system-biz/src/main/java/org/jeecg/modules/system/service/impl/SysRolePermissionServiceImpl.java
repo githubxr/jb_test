@@ -76,7 +76,8 @@ public class SysRolePermissionServiceImpl extends ServiceImpl<SysRolePermissionM
 					list.add(rolepms);
 				}
 			}
-			this.saveBatch(list);
+			//this.saveBatch(list);
+			this.saveOrUpdateBatch(list);
 		}
 		
 		List<String> delete = getDiff(permissionIds,lastPermissionIds);

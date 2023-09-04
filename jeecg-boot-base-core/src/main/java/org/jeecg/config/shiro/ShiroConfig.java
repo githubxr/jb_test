@@ -75,6 +75,9 @@ public class ShiroConfig {
             }
         }
         // 配置不会被拦截的链接 顺序判断
+
+        filterChainDefinitionMap.put("/todo_list/todoList/**", "anon"); //待办接口（system)
+
         filterChainDefinitionMap.put("/sys/cas/client/validateLogin", "anon"); //cas验证登录
         filterChainDefinitionMap.put("/sys/randomImage/**", "anon"); //登录验证码接口排除
         filterChainDefinitionMap.put("/sys/checkCaptcha", "anon"); //登录验证码接口排除

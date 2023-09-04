@@ -16,6 +16,7 @@ import java.net.UnknownHostException;
 * 单体启动类
 * 报错提醒: 未集成mongo报错，可以打开启动类上面的注释 exclude={MongoAutoConfiguration.class}
 */
+/*
 @Slf4j
 @SpringBootApplication
 //@EnableAutoConfiguration(exclude={MongoAutoConfiguration.class})
@@ -42,3 +43,4 @@ public class JeecgSystemApplication extends SpringBootServletInitializer {
     }
 
 }
+*/

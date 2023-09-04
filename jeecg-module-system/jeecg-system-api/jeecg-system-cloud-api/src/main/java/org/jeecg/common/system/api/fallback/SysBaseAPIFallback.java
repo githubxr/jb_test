@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.dto.DataLogDTO;
 import org.jeecg.common.api.dto.OnlineAuthDTO;
 import org.jeecg.common.api.dto.message.*;
+import org.jeecg.common.api.dto.system.SysUserRoleDTO;
+import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.api.ISysBaseAPI;
 import org.jeecg.common.system.vo.*;
 
@@ -22,6 +24,11 @@ public class SysBaseAPIFallback implements ISysBaseAPI {
 
     @Setter
     private Throwable cause;
+
+    @Override
+    public Result<Boolean> addSysUserBatch(List<SysUserRoleDTO> dtoList){
+        return Result.error("fallback", false);
+    }
 
     @Override
     public void sendSysAnnouncement(MessageDTO message) {

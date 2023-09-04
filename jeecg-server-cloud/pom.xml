@@ -21,6 +21,8 @@
         
         <!-- 监控和测试例子 -->
         <module>jeecg-visual</module>
+        <module>test</module>
+        <module>executor</module>
     </modules>
 
 </project>

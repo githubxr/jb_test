@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.system.mapper.SysUserMapper">
+
+	<!-- 根据职务名查询 -->
+	<select id="getUserByPostName" parameterType="String" resultType="org.jeecg.modules.system.entity.SysUser">
+		SELECT u.*
+		FROM sys_user u
+		JOIN sys_position p ON FIND_IN_SET(p.code, u.post)
+		WHERE p.name like '%#{postName}%';
+	</select>
+
+	<!--筛选出列表中没有指定权限的用户-->
+	<select id="getUserWithoutPost" resultType="String">
+		select u.id
+		from
+		values
+		<foreach collection="list" item="" separator=",">
+			(#{user.name}, #{user.password})
+		</foreach>
+	</select>
+
+	<!---->
+	<select id="">
+		SELECT DISTINCT  u.*
+		FROM sys_user u
+		LEFT JOIN sys_position p ON FIND_IN_SET(p.code, u.post)
+		LEFT JOIN sys_user_role ur ON ur.user_id=u.id
+		LEFT JOIN sys_role r ON r.id=ur.role_id
+		WHERE p.name LIKE '%经理%' and r.role_name='管理员';
+	</select>
+
+</mapper>

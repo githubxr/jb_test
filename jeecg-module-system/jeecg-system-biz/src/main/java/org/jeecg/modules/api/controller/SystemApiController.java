@@ -1,19 +1,26 @@
 package org.jeecg.modules.api.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.dto.DataLogDTO;
 import org.jeecg.common.api.dto.OnlineAuthDTO;
 import org.jeecg.common.api.dto.message.*;
+import org.jeecg.common.api.dto.system.SysUserRoleDTO;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.vo.*;
 import org.jeecg.common.util.SqlInjectionUtil;
+import org.jeecg.modules.system.entity.SysRole;
+import org.jeecg.modules.system.entity.SysUserRole;
 import org.jeecg.modules.system.security.DictQueryBlackListHandler;
+import org.jeecg.modules.system.service.ISysRoleService;
+import org.jeecg.modules.system.service.ISysUserRoleService;
 import org.jeecg.modules.system.service.ISysUserService;
 import org.jeecg.modules.system.service.impl.SysBaseApiImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +42,38 @@ public class SystemApiController {
 
     @Autowired
     private DictQueryBlackListHandler dictQueryBlackListHandler;
+
+
+    @Autowired
+    private ISysRoleService sysRoleService;
+    @Autowired
+    private ISysUserRoleService sysUserRoleService;
+
+
+    @PostMapping("/addSysUserBatch")
+    public Result<Boolean> addSysUserBatch(@RequestBody List<SysUserRoleDTO> dtoList){
+        List<SysUserRole> userRoleList = new ArrayList<>();
+        for(int i=0;i< dtoList.size();i++){
+            SysUserRoleDTO sysUserRoleDTO = dtoList.get(i);
+            QueryWrapper roleWrapper = new QueryWrapper<SysRole>().eq("role_name", sysUserRoleDTO.getRoleName());
+            SysRole sysRole = sysRoleService.getOne(roleWrapper);
+            if(sysRole == null){
+                return Result.error(sysUserRoleDTO.getRoleName() + "角色不存在",false);
+            }
+            for(int j=0;j<sysUserRoleDTO.getUserIds().size();j++){
+                SysUserRole sysUserRole = new SysUserRole(sysUserRoleDTO.getUserIds().get(j),sysRole.getId());
+                userRoleList.add(sysUserRole);
+            }
+        }
+
+        try {
+            boolean isSucc = sysUserRoleService.saveOrUpdateBatch(userRoleList);
+            return Result.ok(isSucc);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            return Result.error("出现异常" + e.getMessage(), false);
+        }
+    }
 
 
     /**
