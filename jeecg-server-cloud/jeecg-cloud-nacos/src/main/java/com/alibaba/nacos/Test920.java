@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Test920 {
+    //test2 new line 1
+    //test2 new line 2
     public static void main(String[] args) {
         int i = 0;
         boolean bool = true;
