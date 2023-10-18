@@ -96,7 +96,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysUserTenantMapper relationMapper;
 	@Autowired
     private SysUserTenantMapper userTenantMapper;
-	
+
+	@Override
+	public List<SysUser> getUserByPostName(String postName, boolean isLike) {
+		return userMapper.getUserByPostName(postName, isLike);
+	}
+
 	@Override
 	public Result<IPage<SysUser>> queryPageList(HttpServletRequest req, QueryWrapper<SysUser> queryWrapper, Integer pageSize, Integer pageNo) {
 		Result<IPage<SysUser>> result = new Result<IPage<SysUser>>();

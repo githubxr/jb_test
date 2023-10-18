@@ -20,7 +20,23 @@ import java.util.List;
  * @Author scott
  * @since 2018-12-20
  */
-public interface SysUserMapper extends BaseMapper<SysUser> {
+public interface SysUserMapper extends BaseMapper<SysUser> {	/**
+	 /* 根据职位名，查询拥有职位的用户
+	 * @param postName
+	 * @return
+	 * */
+	List<SysUser> getUserByPostName(String postName, boolean isLike);
+	/**
+	 * 根据职位code查询用户
+	 * */
+	List<SysUser> getUserByPostCode(String postName);
+	/**
+	 * 根据职位codes，查询拥有职位的用户
+	 * @param postCodes
+	 * @return
+	 * */
+	public List<SysUser> getUserByPostCodes(@Param("postCodes") List<String> postCodes);
+
 	/**
 	  * 通过用户账号查询用户信息
 	 * @param username
@@ -181,4 +197,5 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 	 * @return
 	 */
 	List<SysUser> getTenantQuitList(@Param("tenantId") Integer tenantId);
+
 }

@@ -125,7 +125,9 @@ public class QueryGenerator {
 		//权限规则自定义SQL表达式
 		for (String c : ruleMap.keySet()) {
 			if(oConvertUtils.isNotEmpty(c) && c.startsWith(SQL_RULES_COLUMN)){
-				queryWrapper.and(i ->i.apply(getSqlRuleValue(ruleMap.get(c).getRuleValue())));
+				//update-begain-author:xiaoq date:2023-10-7 for: 并列的自定义表达式修改为or拼接
+				queryWrapper.or(i ->i.apply(getSqlRuleValue(ruleMap.get(c).getRuleValue())));
+				//update-end-author:xiaoq date:2023-10-7 for: 并列的自定义表达式修改为or拼接
 			}
 		}
 		
@@ -149,7 +151,7 @@ public class QueryGenerator {
 					continue;
 				}
 				fieldColumnMap.put(name,column);
-				//数据权限查询
+				//非自定义数据权限查询
 				if(ruleMap.containsKey(name)) {
 					addRuleToQueryWrapper(ruleMap.get(name), column, origDescriptors[i].getPropertyType(), queryWrapper);
 				}
@@ -646,6 +648,11 @@ public class QueryGenerator {
 		}
 		name = oConvertUtils.camelToUnderline(name);
 		log.info("---查询过滤器，Query规则---field:{}, rule:{}, value:{}",name,rule.getValue(),value);
+		//update-begain-author:xiaoq date:2023-10-7 for: 修改并列数据规则关系为or
+		if(queryWrapper.getExpression().getNormal().isEmpty() == false) {
+			queryWrapper.or();
+		}
+		//update-begain-author:xiaoq date:2023-10-7 for:  修改并列数据规则关系为or
 		switch (rule) {
 		case GT:
 			queryWrapper.gt(name, value);
@@ -731,7 +738,7 @@ public class QueryGenerator {
 	
 	private static void addRuleToQueryWrapper(SysPermissionDataRuleModel dataRule, String name, Class propertyType, QueryWrapper<?> queryWrapper) {
 		QueryRuleEnum rule = QueryRuleEnum.getByValue(dataRule.getRuleConditions());
-		if(rule.equals(QueryRuleEnum.IN) && ! propertyType.equals(String.class)) {
+		if(rule.equals(QueryRuleEnum.IN) && ! propertyType.equals(String.class)) {//判断：String IN exp...
 			String[] values = dataRule.getRuleValue().split(",");
 			Object[] objs = new Object[values.length];
 			for (int i = 0; i < values.length; i++) {
@@ -741,7 +748,7 @@ public class QueryGenerator {
 		}else {
 			if (propertyType.equals(String.class)) {
 				addEasyQuery(queryWrapper, name, rule, converRuleValue(dataRule.getRuleValue()));
-			}else if (propertyType.equals(Date.class)) {
+			}else if (propertyType.equals(Date.class)) {//date类型
 				String dateStr =converRuleValue(dataRule.getRuleValue());
                 int length = 10;
 				if(dateStr.length()==length){

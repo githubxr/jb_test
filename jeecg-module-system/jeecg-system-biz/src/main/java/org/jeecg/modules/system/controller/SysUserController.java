@@ -71,8 +71,10 @@ public class SysUserController {
     @Autowired
     private ISysDepartService sysDepartService;
 
-	@Autowired
-	private ISysUserRoleService sysUserRoleService;
+    @Autowired
+    private ISysUserRoleService sysUserRoleService;
+    @Autowired
+    private ISysRoleService sysRoleService;
 
 	@Autowired
 	private ISysUserDepartService sysUserDepartService;
@@ -100,6 +102,69 @@ public class SysUserController {
 
     @Autowired
     private ISysUserTenantService userTenantService;
+
+
+    @GetMapping("/tt")
+    public List<SysUser> tt(){
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        String[] arr = new String[]{"%总经理%","一级%支行%行长"};
+        for(int i=0;i<arr.length;i++){
+            if(i>0) wrapper.or();
+            wrapper.like(SysUser::getRealname, arr[i]);
+        }
+        return sysUserService.list(wrapper);
+    }
+
+
+    /**
+     * 为职位用户添加角色
+     * */
+    @PostMapping("/addRoleByPost")
+    public Result<String> addRoleByPost(@RequestBody JSONObject object){
+        String postName = object.getString("postName");
+        List<String> roleNames = object.getObject("roleNames", List.class);
+        ////接收
+        ////通过name获取职位
+        LambdaQueryWrapper<SysPosition> postWrapper = new LambdaQueryWrapper<>();
+        postWrapper.like(SysPosition::getName, postName);
+        SysPosition post = sysPositionService.getOne(postWrapper);
+
+        ////
+        //批量 根据角色名查角色id
+        LambdaQueryWrapper<SysRole> roleLqw = new LambdaQueryWrapper<>();
+        roleLqw.select(SysRole::getId).in(SysRole::getRoleName, roleNames);
+        List<SysRole> roles = sysRoleService.list(roleLqw);
+        List<String> roleIds = roles.stream()
+                .map(SysRole::getId)
+                .collect(Collectors.toList());
+        //批量 根据角色id查用户
+        LambdaQueryWrapper<SysUserRole> userRoleLqw = new LambdaQueryWrapper<>();
+        userRoleLqw.select(SysUserRole::getUserId)
+                .in(SysUserRole::getRoleId, roleIds)
+                .groupBy(SysUserRole::getUserId);
+        List<SysUserRole> userWithRole = sysUserRoleService.list(userRoleLqw);
+        List<String> userWithRoleIds = userWithRole.stream()
+                .map(SysUserRole::getUserId)
+                .collect(Collectors.toList());
+        //根据职位名查用户
+        List<SysUser> users = sysUserService.getUserByPostName(postName,true);
+        List<String> userIds = users.stream()
+                .map(SysUser::getId)
+                .collect(Collectors.toList());
+        //删除交集
+        userIds.removeAll(userWithRoleIds);
+
+        //添加用户角色
+        List<SysUserRole> userRoleList = new ArrayList<>();
+        for(String roleId:roleIds){
+            for(String userId:userIds){
+                SysUserRole sysUserRole = new SysUserRole(userId,roleId);
+                userRoleList.add(sysUserRole);
+            }
+        }
+        Boolean isSucc = sysUserRoleService.saveBatch(userRoleList);
+        return Result.ok("成功:"+isSucc);
+    }
 
     /**
      * 获取租户下用户数据（支持租户隔离）

@@ -2,12 +2,14 @@ package org.jeecg.modules.test.todo_list.xxlJob;
 
 import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Component
+//@Component
+
+@Configuration
 public class ExecutorConfig {
 
     private Logger logger = LoggerFactory.getLogger(ExecutorConfig.class);

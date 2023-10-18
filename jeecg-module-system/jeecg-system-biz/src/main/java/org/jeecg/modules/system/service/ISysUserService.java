@@ -33,6 +33,11 @@ import java.util.Set;
 public interface ISysUserService extends IService<SysUser> {
 
 	/**
+	 * 根据职位名，查询拥有职位的用户
+	 * */
+	List<SysUser> getUserByPostName(String postName, boolean isLike);
+
+	/**
 	 * 查询用户数据列表
 	 * 
 	 * @param req

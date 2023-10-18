@@ -66,7 +66,7 @@ xxl:
     login:
       username: admin
       password: 123456
-    accessToken:
+    accessToken: default_token
     i18n: zh_CN
     #触发池
     triggerpool:
