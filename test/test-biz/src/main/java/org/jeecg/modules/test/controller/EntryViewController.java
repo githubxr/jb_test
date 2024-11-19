@@ -102,6 +102,7 @@ public class EntryViewController extends JeecgController<EntryView, IEntryViewSe
                                               @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
                                               HttpServletRequest req) {
         QueryWrapper<EntryView> queryWrapper = QueryGenerator.initQueryWrapper(v, req.getParameterMap());
+        queryWrapper.orderByAsc("sequence_number");
         Page<EntryView> page = new Page<EntryView>(pageNo, pageSize);
         IPage<EntryView> pageList = entryViewService.page(page, queryWrapper);
         return Result.OK(pageList);
@@ -150,7 +151,15 @@ public class EntryViewController extends JeecgController<EntryView, IEntryViewSe
 
                 //update-begin-author:taoyan date:20190528 for:批量插入数据
                 long start = System.currentTimeMillis();
-                service.saveBatch(list);
+
+                int index=0;
+                for(EntryView ev :list) {
+                    index++;
+                    service.saveToMultSubTable(ev);
+                }
+
+                //service.saveBatch(list);
+                System.out.println("能成功执行！");
                 //400条 saveBatch消耗时间1592毫秒  循环插入消耗时间1947毫秒
                 //1200条  saveBatch消耗时间3687毫秒 循环插入消耗时间5212毫秒
                 log.info("消耗时间" + (System.currentTimeMillis() - start) + "毫秒");

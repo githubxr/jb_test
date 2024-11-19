@@ -162,7 +162,8 @@ public class ExcelImportServerPlus extends ImportBaseService {
         Integer minColumnIndex = (Integer)Collections.min(columnIndexSet);
         Row row = null;
 
-        for(int j = 0; j < params.getTitleRows() + params.getHeadRows(); ++j) {
+        //2024-11-11：添加startRows，以修复startRows无效的情况
+        for(int j = 0; j < params.getTitleRows() + params.getHeadRows() + params.getStartRows(); ++j) {
             row = (Row)rows.next();
         }
 

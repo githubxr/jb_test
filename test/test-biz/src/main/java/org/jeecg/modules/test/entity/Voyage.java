@@ -1,4 +1,4 @@
-package org.jeecg.modules.test.entity.planOld;
+package org.jeecg.modules.test.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -26,9 +26,11 @@ import java.util.Objects;
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value = "航次对象", description = "航次对象")
 public class Voyage implements Serializable {
-    @TableId(value = "voyage_id", type = IdType.ASSIGN_UUID)
-    private String voyage_id; // 航次ID
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
+    private String id; // 航次ID
 
-    private String voyage_code; // 航次编号
-    private String ship_id; // 调查船ID
+    private String voyageCode;
+    private String voyageName;
+    private String shipCode; // 外键关联 SurveyShip
+    private String seaAreaCode; // 外键关联 SeaArea
 }
